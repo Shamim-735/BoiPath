@@ -139,10 +139,10 @@ class LibraryNavigation extends StatelessWidget {
                 height: 48,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF7B4DFF), Color(0xFF4B1FA6)],
+                    colors: [Color.lerp(colors.primary, Colors.white, 0.08)!, Color.lerp(colors.primary, Colors.black, 0.28)!],
                   ),
                   border: selected
                       ? Border.all(
@@ -152,16 +152,16 @@ class LibraryNavigation extends StatelessWidget {
                       : null,
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF7B4DFF).withValues(alpha: 0.45),
+                      color: colors.primary.withValues(alpha: 0.42),
                       blurRadius: 14,
                       spreadRadius: 1,
                       offset: const Offset(0, 4),
                     ),
                   ],
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.search_rounded,
-                  color: Colors.white,
+                  color: colors.onPrimary,
                   size: 24,
                 ),
               ),
