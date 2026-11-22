@@ -89,7 +89,6 @@ class BookArtwork extends StatelessWidget {
                                 size: width * (compact ? .52 : .44),
                               ),
                             ),
-                          ],
                         if (coverUrl != null)
                           Image.network(
                             coverUrl,
@@ -145,6 +144,7 @@ class BookArtwork extends StatelessWidget {
                             ),
                           ),
                         ),
+                            ],
                         ),
                       ),
                     ),
