@@ -91,12 +91,12 @@ class BookArtwork extends StatelessWidget {
                               ),
                             ),
                         if (coverUrl != null)
-                         CoverImage(url: coverUrl),
+                         CoverImage(key: ValueKey<String>(coverUrl), url: coverUrl),
                         Positioned(
                           left: 0,
                           top: 0,
                           bottom: 0,
-                          width: 10,
+                          width: 6,
                           child: IgnorePointer(
                             child: DecoratedBox(
                               decoration: BoxDecoration(
@@ -104,7 +104,7 @@ class BookArtwork extends StatelessWidget {
                                   begin: Alignment.centerLeft,
                                   end: Alignment.centerRight,
                                   colors: [
-                                    Colors.black.withValues(alpha: .28),
+                                    Colors.black.withValues(alpha: .08),
                                     Colors.black.withValues(alpha: .06),
                                     Colors.transparent,
                                   ],
