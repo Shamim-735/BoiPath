@@ -50,9 +50,26 @@ class Book {
         }
       }
       if (fileId != null && fileId.isNotEmpty) {
-      urls.add(Uri.https('drive.google.com', '/thumbnail', {'id': fileId, 'sz': 'w1000'}).toString());
         urls.add(Uri.https('lh3.googleusercontent.com', '/d/$fileId=w1000').toString());
+        urls.add(Uri.https('drive.google.com', '/thumbnail', {'id': fileId, 'sz': 'w1000'}).toString());
         urls.add(Uri.https('drive.google.com', '/thumbnail', {'id': fileId, 'sz': 'w600'}).toString());
+      }
+    }
+    for (final link in sourceDownloads) {
+      final uri = Uri.tryParse(link);
+      if (uri == null || uri.host != 'drive.egovcloud.gov.bd') continue;
+      final sIndex = uri.pathSegments.indexOf('s');
+      if (sIndex != -1 && sIndex + 1 < uri.pathSegments.length) {
+        final token = uri.pathSegments[sIndex + 1];
+        if (token.isNotEmpty) {
+          urls.add(
+            Uri.https(
+              'drive.egovcloud.gov.bd',
+              '/index.php/apps/files_sharing/publicpreview/$token',
+              {'x': '600', 'y': '800', 'a': 'true'},
+            ).toString(),
+          );
+        }
       }
     }
     return urls;
