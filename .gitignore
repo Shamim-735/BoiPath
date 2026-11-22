@@ -1,0 +1,12 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+*.sqlite3*
+.dart_tool/
+build/
+.flutter-plugins-dependencies
+.idea/
+BoiPath_Reader_Test.pdf
+
+.cover-cache/

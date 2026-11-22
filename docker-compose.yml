@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: boipath
+      POSTGRES_USER: boipath
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - boipath_db:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U boipath -d boipath"]
+      interval: 5s
+      timeout: 4s
+      retries: 12
+  api:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://boipath:${POSTGRES_PASSWORD}@db:5432/boipath
+      BOIPATH_ORIGINS: ${BOIPATH_ORIGINS:-http://localhost:8080}
+      OFFICIAL_PDF_HOSTS: ${OFFICIAL_PDF_HOSTS:-}
+      BOIPATH_TEACHER_REGISTRATION: ${BOIPATH_TEACHER_REGISTRATION:-false}
+    ports:
+      - "8000:8000"
+volumes:
+  boipath_db:
