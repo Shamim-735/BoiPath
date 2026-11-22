@@ -9,8 +9,10 @@ class CoverImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.network(
       url,
+      key: ValueKey<String>(url),
+      alignment: Alignment.topCenter,
       fit: BoxFit.cover,
-      filterQuality: FilterQuality.medium,
+      filterQuality: FilterQuality.high,
       frameBuilder: (context, child, frame, wasSync) => AnimatedOpacity(
         opacity: frame == null ? 0 : 1,
         duration: const Duration(milliseconds: 220),
