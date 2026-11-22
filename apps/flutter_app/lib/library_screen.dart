@@ -110,7 +110,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       _ => catalog(store, words),
     };
     final isDark = Theme.of(context).brightness == Brightness.dark;
-      final body = KDecoratedBox(decoration: BoxDecoration(gradient: RadialGradient(center: const Alignment(0, -0.35), radius: 1.15, colors: isDark ? const [Color(0xFF231347), Color(0xFF0E0A18)] : const [Color(0xFFEBE2FF), Color(0xFFF6F3FF)])), child: KeyedSubtree(key: ValueKey(widget.tab), child: page));
+      final body = DecoratedBox(decoration: BoxDecoration(gradient: RadialGradient(center: const Alignment(0, -0.35), radius: 1.15, colors: isDark ? const [Color(0xFF231347), Color(0xFF0E0A18)] : const [Color(0xFFEBE2FF), Color(0xFFF6F3FF)])), child: KeyedSubtree(key: ValueKey(widget.tab), child: page));
     final searchHeight = MediaQuery.textScalerOf(context).scale(16) + 53;
     final header = AppBar(
       toolbarHeight: wide ? 64 : 56,
