@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import 'book.dart';
+import 'cover_image.dart';
 
 /// Draws the same illustration for a title on the shelf and on its detail page.
 class BookArtwork extends StatelessWidget {
@@ -90,28 +91,7 @@ class BookArtwork extends StatelessWidget {
                               ),
                             ),
                         if (coverUrl != null)
-                          Image.network(
-                            coverUrl,
-                            fit: BoxFit.cover,
-                            filterQuality: FilterQuality.medium,
-                            frameBuilder: (
-                              context,
-                              child,
-                              frame,
-                              wasSynchronouslyLoaded,
-                            ) {
-                              return AnimatedOpacity(
-                                opacity: wasSynchronouslyLoaded || frame != null
-                                    ? 1
-                                    : 0,
-                                duration: const Duration(milliseconds: 220),
-                                curve: Curves.easeOut,
-                                child: child,
-                              );
-                            },
-                            errorBuilder: (_, __, ___) =>
-                                const SizedBox.shrink(),
-                          ),
+                         CoverImage(url: coverUrl),
                         Positioned(
                           left: 0,
                           top: 0,
