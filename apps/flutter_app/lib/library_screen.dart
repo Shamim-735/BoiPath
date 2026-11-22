@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -108,7 +109,8 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       3 => settings(store, words),
       _ => catalog(store, words),
     };
-    final body = KeyedSubtree(key: ValueKey(widget.tab), child: page);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+      final body = KDecoratedBox(decoration: BoxDecoration(gradient: RadialGradient(center: const Alignment(0, -0.35), radius: 1.15, colors: isDark ? const [Color(0xFF231347), Color(0xFF0E0A18)] : const [Color(0xFFEBE2FF), Color(0xFFF6F3FF)])), child: KeyedSubtree(key: ValueKey(widget.tab), child: page));
     final searchHeight = MediaQuery.textScalerOf(context).scale(16) + 53;
     final header = AppBar(
       toolbarHeight: wide ? 64 : 56,
@@ -401,68 +403,16 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
 
   Widget bookCard(Book book, LibraryStore store, Words words, bool compact) {
     final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-    final active = store.active.containsKey(book.id);
-    final downloaded = store.paths.containsKey(book.id);
-    final tap = selectable(book, store) ? () => open(book) : null;
-    final heading = Text(book.title, maxLines: 2, overflow: TextOverflow.ellipsis,
-      style: theme.textTheme.titleMedium);
-    return Semantics(selected: selecting ? selected.contains(book.id) : null,
-      child: Card(clipBehavior: Clip.antiAlias, child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(child: InkWell(
-            onTap: tap,
-            child: Padding(padding: const EdgeInsets.fromLTRB(12, 12, 12, 0), child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: compact ? 122 : 139, width: double.infinity,
-                  child: ClipRRect(borderRadius: BorderRadius.circular(16),
-                    child: Stack(fit: StackFit.expand, children: [
-                      BookArtwork(book: book),
-                      if (tap != null) Align(alignment: Alignment.topRight, child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(color: colors.surfaceContainerLow, shape: BoxShape.circle),
-                          child: Padding(padding: const EdgeInsets.all(6), child: Icon(
-                            selecting ? (selected.contains(book.id) ? Icons.check_circle_rounded : Icons.radio_button_unchecked)
-                              : Icons.north_east_rounded,
-                            color: colors.primary, size: 16)),
-                        ),
-                      )),
-                    ]))),
-                const SizedBox(height: 10),
-                Padding(padding: const EdgeInsets.symmetric(horizontal: 3), child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text('${words.className(book.level, book.lastLevel)} · ${words.academicYear(book.year, book.edition)}',
-                      maxLines: 1, overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.labelSmall?.copyWith(color: colors.primary, fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 4),
-                    heading,
-                    const SizedBox(height: 4),
-                    Text(words.version(book.version), maxLines: 1, overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant)),
-                  ],
-                )),
-              ],
-            )),
-          )),
-          Padding(padding: const EdgeInsets.fromLTRB(13, 4, 13, 12), child:
-            !selecting && book.downloadUrl != null
-              ? FilledButton.tonalIcon(
-                  onPressed: active ? null : () => downloadBook(context, store, book, words),
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                    textStyle: theme.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700)),
-                  icon: Icon(active ? Icons.hourglass_top_rounded : Icons.download_rounded, size: 17),
-                  label: Text(words(active ? 'Downloading PDF' : 'Download PDF'),
-                    maxLines: 2, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center),
-                )
-              : Align(alignment: Alignment.centerLeft,
-                child: BookStatus(status: book.status, words: words, downloaded: downloaded))),
-        ],
-      )),
-    );
+   final colors = theme.colorScheme;
+final isDark = theme.brightness == Brightness.dark;
+final downloaded = store.paths.containsKey(book.id);
+final tap = selectable(book, store) ? () => open(book) : null;
+final cardRadius = BorderRadius.circular(20);
+final subtitle = '${words.className(book.level, book.lastLevel)} · ${words.academicYear(book.year, book.edition)}';
+final badge = ClipOval(child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), child: Container(width: 34, height: 34, decoration: BoxDecoration(shape: BoxShape.circle, color: isDark ? Colors.black.withValues(alpha: 0.35) : Colors.white.withValues(alpha: 0.72), border: Border.all(color: Colors.white.withValues(alpha: isDark ? 0.22 : 0.6), width: 1)), child: Icon(selecting ? (selected.contains(book.id) ? Icons.check_circle_rounded : Icons.radio_button_unchecked_rounded) : (downloaded ? Icons.menu_book_rounded : Icons.arrow_forward_rounded), size: 18, color: colors.primary))));
+final overlay = ClipRRect(borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)), child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12), child: Container(padding: EdgeInsets.all(compact ? 10 : 12), decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [const Color(0xFF1F113B).withValues(alpha: 0.58), const Color(0xFF120926).withValues(alpha: 0.86)]), border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.14), width: 1))), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [Text(book.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: (compact ? theme.textTheme.titleSmall : theme.textTheme.titleMedium)?.copyWith(color: Colors.white, fontWeight: FontWeight.w700, height: 1.2)), const SizedBox(height: 3), Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.bodySmall?.copyWith(color: Colors.white.withValues(alpha: 0.78)))]))));
+return Semantics(selected: selecting ? selected.contains(book.id) : null, child: Material(color: Colors.transparent, borderRadius: cardRadius, clipBehavior: Clip.antiAlias, child: InkWell(onTap: tap, borderRadius: cardRadius, child: Container(foregroundDecoration: BoxDecoration(borderRadius: cardRadius, border: Border.all(color: isDark ? Colors.white.withValues(alpha: 0.16) : colors.outlineVariant, width: 1)), child: ClipRRect(borderRadius: cardRadius, child: Stack(fit: StackFit.expand, children: [Positioned.fill(child: BookArtwork(book: book)), Positioned(top: 10, right: 10, child: badge), Positioned(left: 0, right: 0, bottom: 0, child: overlay)]))))));
+   
   }
 
   Widget catalogTile(Book book, LibraryStore store, Words words) => Card(
