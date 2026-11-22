@@ -6,9 +6,9 @@ import 'theme_profile.dart';
 ColorScheme _violetScheme(Brightness brightness) {
   final dark = brightness == Brightness.dark;
   final brand = dark ? const Color(0xffc3adff) : const Color(0xff5e3cba);
-  final page = dark ? const Color(0xff181326) : const Color(0xfff8f6ff);
-  final panel = dark ? const Color(0xff241b37) : Colors.white;
-  final border = dark ? const Color(0xff504467) : const Color(0xffe3dcef);
+  final page = dark ? const Color(0xff181326) : const Color(0xFFFAFAFC);
+  final panel = dark ? const Color(0xff241b37) : const Color(0xFFFFFFFF);
+  final border = dark ? const Color(0xff504467) : const Color(0xFFE6E4EC);
   final text = dark ? const Color(0xffede5fb) : const Color(0xff261b3e);
   final muted = dark ? const Color(0xffccbfdd) : const Color(0xff5d5074);
   return ColorScheme.fromSeed(seedColor: brand, brightness: brightness)
@@ -21,7 +21,7 @@ ColorScheme _violetScheme(Brightness brightness) {
         onSurface: text,
         onSurfaceVariant: muted,
         surfaceContainerLow: panel,
-        surfaceContainer: dark ? const Color(0xff2d2243) : const Color(0xfff2edff),
+        surfaceContainer: dark ? const Color(0xff2d2243) : const Color(0xFFF3F2F7),
         surfaceContainerHighest: dark ? const Color(0xff45365e) : const Color(0xffeae1fa),
         outline: muted,
         outlineVariant: border,
@@ -44,23 +44,23 @@ ThemeData boiPathTheme(Brightness brightness, [ThemeProfile profile = ThemeProfi
   final muted = scheme.onSurfaceVariant;
   final base = ThemeData(useMaterial3: true, colorScheme: scheme);
   final type = base.textTheme.apply(bodyColor: text, displayColor: text);
-  final shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(23));
+  final shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(16));
   return base.copyWith(
     scaffoldBackgroundColor: page,
     textTheme: type.copyWith(
-      displaySmall: type.displaySmall?.copyWith(fontWeight: FontWeight.w800, height: 1.14),
-      headlineMedium: type.headlineMedium?.copyWith(fontWeight: FontWeight.w800, height: 1.17),
-      headlineSmall: type.headlineSmall?.copyWith(fontWeight: FontWeight.w800, height: 1.23),
-      titleLarge: type.titleLarge?.copyWith(fontWeight: FontWeight.w700, height: 1.3),
-      titleMedium: type.titleMedium?.copyWith(fontWeight: FontWeight.w700, height: 1.36),
-      bodyMedium: type.bodyMedium?.copyWith(height: 1.48),
+      displaySmall: type.displaySmall?.copyWith(fontWeight: FontWeight.w800, height: 1.14, letterSpacing: -0.3),
+      headlineMedium: type.headlineMedium?.copyWith(fontWeight: FontWeight.w800, height: 1.17, letterSpacing: -0.3),
+      headlineSmall: type.headlineSmall?.copyWith(fontWeight: FontWeight.w800, height: 1.23, letterSpacing: -0.3),
+      titleLarge: type.titleLarge?.copyWith(fontWeight: FontWeight.w700, height: 1.3, letterSpacing: -0.3),
+      titleMedium: type.titleMedium?.copyWith(fontWeight: FontWeight.w700, height: 1.36, letterSpacing: -0.3),
+      bodyMedium: type.bodyMedium?.copyWith(height: 1.45),
     ),
     appBarTheme: AppBarThemeData(backgroundColor: panel, surfaceTintColor: Colors.transparent,
       foregroundColor: text, elevation: 0, scrolledUnderElevation: 0, centerTitle: false),
     cardTheme: CardThemeData(color: panel, elevation: 1, margin: EdgeInsets.zero,
       shadowColor: brand.withValues(alpha: dark ? .10 : .16),
       surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(23), side: BorderSide(color: border))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: border))),
     dialogTheme: DialogThemeData(backgroundColor: panel,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24))),
     navigationRailTheme: NavigationRailThemeData(
@@ -83,9 +83,9 @@ ThemeData boiPathTheme(Brightness brightness, [ThemeProfile profile = ThemeProfi
     )),
     inputDecorationTheme: InputDecorationThemeData(
       filled: true, fillColor: panel,
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: border)),
-      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: border)),
-      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: brand, width: 2)),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: border)),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: border)),
+      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: brand, width: 2)),
     ),
     dividerTheme: DividerThemeData(color: border),
     snackBarTheme: const SnackBarThemeData(behavior: SnackBarBehavior.floating),
