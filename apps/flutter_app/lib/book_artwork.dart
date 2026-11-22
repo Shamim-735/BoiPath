@@ -45,7 +45,7 @@ class BookArtwork extends StatelessWidget {
           final corner = BorderRadius.circular(width * .10);
           final coverTop = Color.lerp(accent, const Color(0xff43216c), .33)!;
           final coverBottom = Color.lerp(accent, const Color(0xff2c194d), .68)!;
-
+          final coverUrl = book.resolvedCoverUrl;
           return Stack(
             fit: StackFit.expand,
             children: [
@@ -90,6 +90,61 @@ class BookArtwork extends StatelessWidget {
                               ),
                             ),
                           ],
+                        if (coverUrl != null)
+                          Image.network(
+                            coverUrl,
+                            fit: BoxFit.cover,
+                            filterQuality: FilterQuality.medium,
+                            frameBuilder: (
+                              context,
+                              child,
+                              frame,
+                              wasSynchronouslyLoaded,
+                            ) {
+                              return AnimatedOpacity(
+                                opacity: wasSynchronouslyLoaded || frame != null
+                                    ? 1
+                                    : 0,
+                                duration: const Duration(milliseconds: 220),
+                                curve: Curves.easeOut,
+                                child: child,
+                              );
+                            },
+                            errorBuilder: (_, __, ___) =>
+                                const SizedBox.shrink(),
+                          ),
+                        Positioned(
+                          left: 0,
+                          top: 0,
+                          bottom: 0,
+                          width: 10,
+                          child: IgnorePointer(
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [
+                                    Colors.black.withValues(alpha: .28),
+                                    Colors.black.withValues(alpha: .06),
+                                    Colors.transparent,
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        IgnorePointer(
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              borderRadius: corner,
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: .16),
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                        ),
                         ),
                       ),
                     ),
