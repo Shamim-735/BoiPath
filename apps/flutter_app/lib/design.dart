@@ -5,24 +5,24 @@ import 'theme_profile.dart';
 
 ColorScheme _violetScheme(Brightness brightness) {
   final dark = brightness == Brightness.dark;
-  final brand = dark ? const Color(0xffc3adff) : const Color(0xff5e3cba);
-  final page = dark ? const Color(0xff181326) : const Color(0xFFFAFAFC);
-  final panel = dark ? const Color(0xff241b37) : const Color(0xFFFFFFFF);
-  final border = dark ? const Color(0xff504467) : const Color(0xFFE6E4EC);
+  final brand = dark ? const Color(0xFF8B62FF) : const Color(0xFF4F28B8);
+  final page = dark ? const Color(0xFF0E0A18) : const Color(0xFFF6F3FF);
+  final panel = dark ? const Color(0xFF171128) : const Color(0xFFFFFFFF);
+  final border = dark ? const Color(0xFF332752) : const Color(0xFFE6E4EC);
   final text = dark ? const Color(0xffede5fb) : const Color(0xff261b3e);
   final muted = dark ? const Color(0xffccbfdd) : const Color(0xff5d5074);
   return ColorScheme.fromSeed(seedColor: brand, brightness: brightness)
       .copyWith(
         primary: brand,
         onPrimary: dark ? const Color(0xff271648) : Colors.white,
-        primaryContainer: dark ? const Color(0xff40305d) : const Color(0xffece4ff),
+        primaryContainer: dark ? const Color(0xFF3A2373) : const Color(0xffece4ff),
         onPrimaryContainer: dark ? const Color(0xfff3e5ff) : const Color(0xff432887),
         surface: page,
         onSurface: text,
         onSurfaceVariant: muted,
         surfaceContainerLow: panel,
-        surfaceContainer: dark ? const Color(0xff2d2243) : const Color(0xFFF3F2F7),
-        surfaceContainerHighest: dark ? const Color(0xff45365e) : const Color(0xffeae1fa),
+            surfaceContainer: dark ? const Color(0xFF211838) : const Color(0xFFF3F2F7),
+        surfaceContainerHighest: dark ? const Color(0xFF2E224D) : const Color(0xffeae1fa),
         outline: muted,
         outlineVariant: border,
         tertiary: dark ? const Color(0xffefc688) : const Color(0xff765317),
@@ -60,7 +60,7 @@ ThemeData boiPathTheme(Brightness brightness, [ThemeProfile profile = ThemeProfi
     cardTheme: CardThemeData(color: panel, elevation: 1, margin: EdgeInsets.zero,
       shadowColor: brand.withValues(alpha: dark ? .10 : .16),
       surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(color: border))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: BorderSide(color: border))),
     dialogTheme: DialogThemeData(backgroundColor: panel,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24))),
     navigationRailTheme: NavigationRailThemeData(
