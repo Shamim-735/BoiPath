@@ -144,7 +144,7 @@ void main() {
     expect(tester.widget<LibraryNavigation>(navigation).selectedIndex, 3);
     await tester.tap(find.descendant(of: navigation, matching: find.text('Settings')));
     await tester.pumpAndSettle();
-    expect(tester.widget<LibraryNavigation>(navigation).selectedIndex, 3);
+    expect(tester.widget<LibraryNavigation>(navigation).selectedIndex, 4);
     await tester.tap(find.descendant(of: navigation, matching: find.text('Library')));
     await tester.pumpAndSettle();
     expect(tester.widget<LibraryNavigation>(navigation).selectedIndex, 0);
