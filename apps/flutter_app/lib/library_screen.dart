@@ -18,7 +18,7 @@ import 'strings.dart';
 import 'theme_profile.dart';
 
 const routes = ['/', '/downloads', '/teach', '/settings'];
-const labels = ['Library', 'Downloads', 'Teacher Mode', 'Settings'];
+const labels = ['Library', 'Downloads', 'Present', 'Settings'];
 const icons = [Icons.home_outlined, Icons.download_outlined, Icons.school_outlined, Icons.settings_outlined];
 const selectedIcons = [Icons.home_rounded, Icons.download_rounded, Icons.school_rounded, Icons.settings_rounded];
 void toast(BuildContext context, String text) =>
@@ -151,7 +151,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       (label: words(labels[0]), icon: icons[0], selectedIcon: selectedIcons[0]),
             (label: words(labels[1]), icon: icons[1], selectedIcon: selectedIcons[1]),
             (label: words('Search'), icon: Icons.search_outlined, selectedIcon: Icons.search_rounded),
-            (label: words('Teach'), icon: icons[2], selectedIcon: selectedIcons[2]),
+            (label: words('Present'), icon: icons[2], selectedIcon: selectedIcons[2]),
             (label: words(labels[3]), icon: icons[3], selectedIcon: selectedIcons[3]),
         ],
       ),
@@ -504,22 +504,10 @@ return Semantics(selected: selecting ? selected.contains(book.id) : null, child:
       LibraryQuickAction(icon: Icons.picture_as_pdf_outlined, title: words('Open PDF from device'),
         detail: words('Present and annotate a PDF you already have.'), emphasized: true,
         onTap: () => openDevicePdf(context, store, words)),
-      LibraryQuickAction(icon: Icons.meeting_room_outlined, title: words('Join classroom'),
-        detail: words('Enter a code to follow a live lesson.'),
-        onTap: () => joinClassroom(context, store, words)),
     ];
     return workspace(words('Teacher Mode'), words('Present textbooks, mark up pages, and lead live lessons.'), [
-      LayoutBuilder(builder: (context, bounds) => bounds.maxWidth >= 650
-        ? Row(children: [Expanded(child: actions[0]), const SizedBox(width: 10), Expanded(child: actions[1])])
-        : Column(children: [actions[0], const SizedBox(height: 10), actions[1]])),
-      const SizedBox(height: 12),
-      Align(alignment: Alignment.centerLeft, child: OutlinedButton.icon(
-        onPressed: () async {
-          await teacherSignIn(context, store, words);
-          if (mounted) setState(() {});
-        }, icon: const Icon(Icons.person_outline), label: Text(words(
-          liveTeacherToken == null ? 'Teacher sign-in' : 'Sign out')))),
-      const SizedBox(height: 26),
+      actions[0],
+        const SizedBox(height: 26),
       Text(words('Choose a textbook to present'), style: Theme.of(context).textTheme.titleLarge),
       const SizedBox(height: 10),
       if (textbooks.isEmpty) EmptyPanel(icon: Icons.co_present_outlined,
