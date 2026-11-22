@@ -50,8 +50,8 @@ class Book {
         }
       }
       if (fileId != null && fileId.isNotEmpty) {
-        urls.add(Uri.https('lh3.googleusercontent.com', '/d/$fileId=w1000').toString());
         urls.add(Uri.https('drive.google.com', '/thumbnail', {'id': fileId, 'sz': 'w1000'}).toString());
+        urls.add(Uri.https('lh3.googleusercontent.com', '/d/$fileId=w1000').toString());
         urls.add(Uri.https('drive.google.com', '/thumbnail', {'id': fileId, 'sz': 'w600'}).toString());
       }
     }
