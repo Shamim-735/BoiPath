@@ -70,7 +70,7 @@ class LibraryNavigation extends StatelessWidget {
                         shadow: shadow.withValues(alpha: dark ? .55 : .23),
                       )),
                       destinations!,
-                      Positioned(
+                    if (!(items.length == 5 && selectedIndex == 2))   Positioned(
                         left: center - _medallionSize / 2,
                         top: 0,
                         child: IgnorePointer(child: ExcludeSemantics(child: DecoratedBox(
@@ -120,6 +120,56 @@ class LibraryNavigation extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final activate = () => onSelected(index);
+
+       if (items.length == 5 && index == 2) {
+      return Semantics(
+        container: true,
+        label: item.label,
+        button: true,
+        selected: selected,
+        onTap: activate,
+        child: Tooltip(
+          message: item.label,
+          child: Center(
+            child: InkResponse(
+              onTap: activate,
+              customBorder: const CircleBorder(),
+              child: Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color(0xFF7B4DFF), Color(0xFF4B1FA6)],
+                  ),
+                  border: selected
+                      ? Border.all(
+                          color: Colors.white.withValues(alpha: 0.45),
+                          width: 1.5,
+                        )
+                      : null,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF7B4DFF).withValues(alpha: 0.45),
+                      blurRadius: 14,
+                      spreadRadius: 1,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.search_rounded,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
 
     return Semantics(
       container: true,
