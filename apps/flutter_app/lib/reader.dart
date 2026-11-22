@@ -180,6 +180,10 @@ class _ReaderState extends State<Reader> {
     final activeSearch = searcher;
     final params = PdfViewerParams(
       backgroundColor: colors.surfaceContainerHighest,
+      scrollByMouseWheel: 0.55,
+      scrollPhysics: const BouncingScrollPhysics(decelerationRate: ScrollDecelerationRate.fast),
+      verticalCacheExtent: 1.5,
+      viewerOverlayBuilder: (context, size, handleLinkTap) => [PdfViewerScrollThumb(controller: controller, orientation: ScrollbarOrientation.right, thumbSize: const Size(44, 28), thumbBuilder: (context, thumbSize, pageNumber, controller) => Container(decoration: BoxDecoration(color: colors.primary, borderRadius: BorderRadius.circular(14)), alignment: Alignment.center, child: Text(pageNumber?.toString() ?? '', style: TextStyle(color: colors.onPrimary, fontSize: 12, fontWeight: FontWeight.w600))))],
       onPageChanged: onPage,
       panEnabled: ink.tool == InkTool.pan || !ink.visible,
       scaleEnabled: ink.tool == InkTool.pan || !ink.visible,
