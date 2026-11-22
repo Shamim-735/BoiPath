@@ -12,6 +12,7 @@ class CoverImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return IgnorePointer(
       child: HtmlElementView.fromTagName(
+        key: ValueKey<String>(url),
         tagName: 'img',
         onElementCreated: (Object element) {
           final img = element as web.HTMLImageElement;
@@ -21,6 +22,7 @@ class CoverImage extends StatelessWidget {
             ..width = '100%'
             ..height = '100%'
             ..objectFit = 'cover'
+            ..objectPosition = 'top center'
             ..display = 'block'
             ..pointerEvents = 'none';
           img.onerror = ((web.Event _) {
