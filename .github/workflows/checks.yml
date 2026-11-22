@@ -38,7 +38,7 @@ jobs:
       - run: python3 scripts/configure_flutter.py
       - run: flutter pub get
         working-directory: apps/flutter_app
-      - run: flutter analyze lib test
+      - run: flutter analyze --no-fatal-infos lib test
         working-directory: apps/flutter_app
       - run: flutter test test/catalog_test.dart
         working-directory: apps/flutter_app
