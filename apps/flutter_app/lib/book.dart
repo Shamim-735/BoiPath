@@ -33,10 +33,11 @@ class Book {
     return pdf ?? (links.isEmpty ? null : links.first);
   }
 
-   String? get resolvedCoverUrl {
-    final explicitCover = cover?.trim();
+   List<String> get resolvedCoverUrls {
+      final urls = <String>[];
+     final explicitCover = cover?.trim();
     if (explicitCover != null && explicitCover.isNotEmpty) {
-      return explicitCover;
+      urls.add(explicitCover);
     }
     for (final link in sourceDownloads) {
       final uri = Uri.tryParse(link);
@@ -49,12 +50,15 @@ class Book {
         }
       }
       if (fileId != null && fileId.isNotEmpty) {
-      return Uri.https('lh3.googleusercontent.com', '/d/$fileId=w1000').toString();
+      urls.add(Uri.https('drive.google.com', '/thumbnail', {'id': fileId, 'sz': 'w1000'}).toString());
+        urls.add(Uri.https('lh3.googleusercontent.com', '/d/$fileId=w1000').toString());
+        urls.add(Uri.https('drive.google.com', '/thumbnail', {'id': fileId, 'sz': 'w600'}).toString());
       }
     }
-    return null;
+    return urls;
   }
-
+  String? get resolvedCoverUrl => resolvedCoverUrls.isEmpty ? null : resolvedCoverUrls.first;
+  
   String? get offlineDownloadUrl {
     final verified = pdf;
     if (verified != null) return verified;
