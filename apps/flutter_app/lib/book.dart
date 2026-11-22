@@ -49,7 +49,7 @@ class Book {
         }
       }
       if (fileId != null && fileId.isNotEmpty) {
-      return Uri.https('lh3.googleusercontent.com', '/d/$fileId=w600').toString();
+      return Uri.https('lh3.googleusercontent.com', '/d/$fileId=w1000').toString();
       }
     }
     return null;
