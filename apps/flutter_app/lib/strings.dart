@@ -27,7 +27,7 @@ class Words {
   }
 
   static const _bangla = {
-    'Present': 'প্রেজেন্ট', 'Downloading PDF': 'পিডিএফ ডাউনলোড হচ্ছে', 'PDF available': 'পিডিএফ পাওয়া যাচ্ছে',
+    'Downloading PDF': 'পিডিএফ ডাউনলোড হচ্ছে', 'PDF available': 'পিডিএফ পাওয়া যাচ্ছে',
     'Alternate PDF download': 'পিডিএফের বিকল্প ডাউনলোড লিংক',
     'NCTB textbook library': 'এনসিটিবি পাঠ্যবই লাইব্রেরি',
     'Color profile': 'রঙের প্রোফাইল', 'Violet': 'বেগুনি', 'Ocean': 'সমুদ্র নীল',
