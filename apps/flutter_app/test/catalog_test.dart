@@ -75,7 +75,7 @@ void main() {
       ])),
     ));
     expect(find.byIcon(Icons.calculate_rounded), findsNWidgets(2));
-    expect(find.byType(Image), findsNothing);
+    expect(find.byType(Image), findsNWidgets(2));
     expect(tester.takeException(), isNull);
   });
 
@@ -131,7 +131,7 @@ void main() {
     final navigation = find.byType(LibraryNavigation);
     expect(navigation, findsOneWidget);
     expect(tester.widget<LibraryNavigation>(navigation).selectedIndex, 0);
-    expect(find.descendant(of: navigation, matching: find.text('Teacher Mode')), findsOneWidget);
+    expect(find.descendant(of: navigation, matching: find.text('Present')), findsOneWidget);
     await tester.enterText(find.byType(TextField).first, 'no-such-book');
     await tester.pumpAndSettle();
     expect(find.text('No books match these filters.'), findsOneWidget);
@@ -139,7 +139,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('No downloads yet.'), findsOneWidget);
     expect(tester.widget<LibraryNavigation>(navigation).selectedIndex, 1);
-    await tester.tap(find.descendant(of: navigation, matching: find.text('Teacher Mode')));
+    await tester.tap(find.descendant(of: navigation, matching: find.text('Present')));
     await tester.pumpAndSettle();
     expect(tester.widget<LibraryNavigation>(navigation).selectedIndex, 2);
     await tester.tap(find.descendant(of: navigation, matching: find.text('Settings')));
@@ -192,7 +192,7 @@ void main() {
     ], child: const BoiPath()));
     await tester.pumpAndSettle();
     expect(find.byType(NavigationRail), findsOneWidget);
-    expect(find.text('Explore textbooks'), findsOneWidget);
+    expect(find.text('Catalog'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }
