@@ -109,7 +109,7 @@ class BrandLockup extends StatelessWidget {
         child: Icon(Icons.auto_stories_rounded, size: 22, color: colors.onPrimary)),
       if (showName) ...[
         const SizedBox(width: 10),
-        Text(words('BoiPath'), style: Theme.of(context).textTheme.titleLarge),
+       Flexible(child: Text(words('BoiPath'), maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleLarge)),
       ],
     ]);
   }
