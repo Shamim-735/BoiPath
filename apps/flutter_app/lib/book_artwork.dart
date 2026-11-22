@@ -46,7 +46,7 @@ class BookArtwork extends StatelessWidget {
           final corner = BorderRadius.circular(width * .10);
           final coverTop = Color.lerp(accent, const Color(0xff43216c), .33)!;
           final coverBottom = Color.lerp(accent, const Color(0xff2c194d), .68)!;
-          final coverUrl = book.resolvedCoverUrl;
+          final coverUrls = book.resolvedCoverUrls;
           return Stack(
             fit: StackFit.expand,
             children: [
@@ -90,8 +90,8 @@ class BookArtwork extends StatelessWidget {
                                 size: width * (compact ? .52 : .44),
                               ),
                             ),
-                        if (coverUrl != null)
-                         CoverImage(key: ValueKey<String>(coverUrl), url: coverUrl),
+                        if (coverUrls.isNotEmpty)
+                         CoverImage(key: ValueKey<String>(coverUrls.first), urls: coverUrls),
                         Positioned(
                           left: 0,
                           top: 0,
