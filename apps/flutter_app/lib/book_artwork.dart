@@ -92,6 +92,7 @@ class BookArtwork extends StatelessWidget {
                             ),
                         if (coverUrls.isNotEmpty)
                          CoverImage(key: ValueKey<String>(coverUrls.first), urls: coverUrls),
+                      Image.asset('assets/covers/${book.id}.jpg', fit: BoxFit.cover, alignment: Alignment.topCenter, filterQuality: FilterQuality.medium, errorBuilder: (_, __, ___) => const SizedBox.shrink()),
                         Positioned(
                           left: 0,
                           top: 0,
