@@ -19,8 +19,8 @@ import 'theme_profile.dart';
 
 const routes = ['/', '/downloads', '/teach', '/settings'];
 const labels = ['Library', 'Downloads', 'Present', 'Settings'];
-const icons = [Icons.home_outlined, Icons.download_outlined, Icons.school_outlined, Icons.settings_outlined];
-const selectedIcons = [Icons.home_rounded, Icons.download_rounded, Icons.school_rounded, Icons.settings_rounded];
+const icons = [Icons.home_outlined, Icons.download_outlined, Icons.slideshow_outlined, Icons.settings_outlined];
+const selectedIcons = [Icons.home_rounded, Icons.download_rounded, Icons.slideshow_rounded, Icons.settings_rounded];
 void toast(BuildContext context, String text) =>
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
 
@@ -308,7 +308,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     ]);
     final filters = Wrap(spacing: 7, runSpacing: 4, crossAxisAlignment: WrapCrossAlignment.center, children: [
       dropdown<int>(words('All classes'), level,
-        {for (var i = 1; i <= 12; i++) i: words.className(i)}, Icons.school_outlined, (v) => level = v),
+        {for (var i = 1; i <= 12; i++) i: words.className(i)}, Icons.slideshow_outlined, (v) => level = v),
       dropdown<int>(words('All years'), year,
         {for (final y in years) y: editions[y]!.length == 1 ? editions[y]!.single : words.number(y)},
         Icons.calendar_today_outlined, (v) => year = v),
