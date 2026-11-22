@@ -18,8 +18,8 @@ import 'theme_profile.dart';
 
 const routes = ['/', '/downloads', '/teach', '/settings'];
 const labels = ['Library', 'Downloads', 'Teacher Mode', 'Settings'];
-const icons = [Icons.auto_stories_outlined, Icons.download_for_offline_outlined, Icons.cast_for_education_outlined, Icons.tune_outlined];
-const selectedIcons = [Icons.auto_stories_rounded, Icons.download_for_offline_rounded, Icons.cast_for_education_rounded, Icons.tune_rounded];
+const icons = [Icons.home_outlined, Icons.download_outlined, Icons.school_outlined, Icons.settings_outlined];
+const selectedIcons = [Icons.home_rounded, Icons.download_rounded, Icons.school_rounded, Icons.settings_rounded];
 void toast(BuildContext context, String text) =>
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
 
@@ -134,17 +134,23 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     return Scaffold(
       appBar: wide ? null : header,
       bottomNavigationBar: wide || MediaQuery.viewInsetsOf(context).bottom > 0 ? null : LibraryNavigation(
-        selectedIndex: widget.tab,
-        onSelected: (index) => context.go(routes[index]),
-              onSearchTap: () {
+        selectedIndex: widget.tab >= 2 ? widget.tab + 1 : widget.tab,
+        onSelected: (index) {
+              if (index == 2) {
                 if (widget.tab != 0) context.go(routes[0]);
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (mounted) searchFocus.requestFocus();
                 });
-              },
+                  return;
+              }
+            context.go(routes[index > 2 ? index - 1 : index]);
+            },
         items: [
-          for (var index = 0; index < routes.length; index++)
-            (label: words(labels[index]), icon: icons[index], selectedIcon: selectedIcons[index]),
+      (label: words(labels[0]), icon: icons[0], selectedIcon: selectedIcons[0]),
+            (label: words(labels[1]), icon: icons[1], selectedIcon: selectedIcons[1]),
+            (label: words('Search'), icon: Icons.search_outlined, selectedIcon: Icons.search_rounded),
+            (label: words('Teach'), icon: icons[2], selectedIcon: selectedIcons[2]),
+            (label: words(labels[3]), icon: icons[3], selectedIcon: selectedIcons[3]),
         ],
       ),
       body: SafeArea(top: !wide, child: Row(children: [
