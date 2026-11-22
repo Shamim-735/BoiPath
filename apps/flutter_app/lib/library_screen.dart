@@ -18,9 +18,8 @@ import 'theme_profile.dart';
 
 const routes = ['/', '/downloads', '/teach', '/settings'];
 const labels = ['Library', 'Downloads', 'Teacher Mode', 'Settings'];
-const icons = [Icons.local_library_outlined, Icons.download_outlined, Icons.co_present_outlined, Icons.settings_outlined];
-const selectedIcons = [Icons.local_library_rounded, Icons.download_rounded, Icons.co_present_rounded, Icons.settings_rounded];
-
+const icons = [Icons.auto_stories_outlined, Icons.download_for_offline_outlined, Icons.cast_for_education_outlined, Icons.tune_outlined];
+const selectedIcons = [Icons.auto_stories_rounded, Icons.download_for_offline_rounded, Icons.cast_for_education_rounded, Icons.tune_rounded];
 void toast(BuildContext context, String text) =>
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
 
@@ -137,6 +136,12 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       bottomNavigationBar: wide || MediaQuery.viewInsetsOf(context).bottom > 0 ? null : LibraryNavigation(
         selectedIndex: widget.tab,
         onSelected: (index) => context.go(routes[index]),
+              onSearchTap: () {
+                if (widget.tab != 0) context.go(routes[0]);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) searchFocus.requestFocus();
+                });
+              },
         items: [
           for (var index = 0; index < routes.length; index++)
             (label: words(labels[index]), icon: icons[index], selectedIcon: selectedIcons[index]),
@@ -402,7 +407,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         children: [
           Expanded(child: InkWell(
             onTap: tap,
-            child: Padding(padding: const EdgeInsets.fromLTRB(10, 10, 10, 0), child: Column(
+            child: Padding(padding: const EdgeInsets.fromLTRB(12, 12, 12, 0), child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: compact ? 122 : 139, width: double.infinity,
