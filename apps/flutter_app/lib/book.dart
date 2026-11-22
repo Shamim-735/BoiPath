@@ -33,6 +33,31 @@ class Book {
     return pdf ?? (links.isEmpty ? null : links.first);
   }
 
+   String? get resolvedCoverUrl {
+    final explicitCover = cover?.trim();
+    if (explicitCover != null && explicitCover.isNotEmpty) {
+      return explicitCover;
+    }
+    for (final link in sourceDownloads) {
+      final uri = Uri.tryParse(link);
+      if (uri == null || uri.host != 'drive.google.com') continue;
+      String? fileId = uri.queryParameters['id'];
+      if (fileId == null || fileId.isEmpty) {
+        final dIndex = uri.pathSegments.indexOf('d');
+        if (dIndex != -1 && dIndex + 1 < uri.pathSegments.length) {
+          fileId = uri.pathSegments[dIndex + 1];
+        }
+      }
+      if (fileId != null && fileId.isNotEmpty) {
+        return Uri.https('drive.google.com', '/thumbnail', {
+          'id': fileId,
+          'sz': 'w600',
+        }).toString();
+      }
+    }
+    return null;
+  }
+
   String? get offlineDownloadUrl {
     final verified = pdf;
     if (verified != null) return verified;
