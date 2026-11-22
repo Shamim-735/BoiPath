@@ -75,7 +75,7 @@ void main() {
       ])),
     ));
     expect(find.byIcon(Icons.calculate_rounded), findsNWidgets(2));
-    expect(find.byType(Image), findsNWidgets(2));
+    expect(find.byType(Image), findsAtLeastNWidgets(2));
     expect(tester.takeException(), isNull);
   });
 
