@@ -55,7 +55,7 @@ class LibraryStore extends ChangeNotifier {
   Future<void> initialize() async {
     final prefs = _prefs = await SharedPreferences.getInstance();
     bangla = prefs.getBool('bangla') ?? false;
-    dark = prefs.getBool('dark') ?? true
+    dark = prefs.getBool('dark') ?? true;
     themeProfile = ThemeProfile.restore(prefs.getString('themeProfile'));
     firstRun = !(prefs.getBool('onboarded') ?? false);
     pages.addAll(Map<String, int>.from(jsonDecode(prefs.getString('pages') ?? '{}') as Map));
