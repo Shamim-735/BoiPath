@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 class LibraryNavigation extends StatelessWidget {
@@ -6,83 +8,100 @@ class LibraryNavigation extends StatelessWidget {
     required this.selectedIndex,
     required this.items,
     required this.onSelected,
-    this.onSearchTap,
   });
 
   final int selectedIndex;
   final List<({String label, IconData icon, IconData selectedIcon})> items;
   final ValueChanged<int> onSelected;
-  final VoidCallback? onSearchTap;
+
+  static const _medallionSize = 44.0;
+  static const _surfaceTop = 19.0;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final dark = theme.brightness == Brightness.dark;
-    final shadowColor = dark ? const Color(0xff0b0610) : colors.shadow;
-    final leftCount = items.length >= 4 ? 2 : items.length ~/ 2;
+    final labelHeight = math.max(23.0, MediaQuery.textScalerOf(context).scale(11) * 2.6);
+    final duration = MediaQuery.disableAnimationsOf(context)
+        ? Duration.zero : const Duration(milliseconds: 340);
+    final shadow = dark ? const Color(0xff100916) : colors.primary;
+
+    final direction = Directionality.of(context);
+    final visualIndex = (direction == TextDirection.ltr
+        ? selectedIndex : items.length - 1 - selectedIndex).toDouble();
 
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 4, 14, 10),
+        padding: const EdgeInsets.fromLTRB(12, 2, 12, 8),
         child: Align(
           alignment: Alignment.bottomCenter,
           heightFactor: 1,
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 540),
-            child: Container(
-              height: 68,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              decoration: BoxDecoration(
-                color: colors.surfaceContainerLow,
-                borderRadius: BorderRadius.circular(22),
-                border: Border.all(
-                  color: colors.outlineVariant,
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: shadowColor.withValues(alpha: dark ? .45 : .12),
-                    blurRadius: 22,
-                    offset: const Offset(0, 8),
+            child: SizedBox(
+              width: double.infinity,
+              height: 55 + labelHeight + 7,
+              child: LayoutBuilder(builder: (context, bounds) {
+                final slotWidth = bounds.maxWidth / items.length;
+                return TweenAnimationBuilder<double>(
+                  tween: Tween(begin: visualIndex, end: visualIndex),
+                  duration: duration,
+                  curve: Curves.easeInOutCubic,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      for (var index = 0; index < items.length; index++)
+                        Expanded(child: _destination(context, index, labelHeight: labelHeight,
+                          duration: duration)),
+                    ],
                   ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  for (var index = 0; index < leftCount; index++)
-                    Expanded(child: _destination(context, index)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: Semantics(
-                      button: true,
-                      label: 'Search catalog',
-                      child: Material(
-                        color: colors.primary,
-                        shape: const CircleBorder(),
-                        elevation: 4,
-                        shadowColor: colors.primary.withValues(alpha: .36),
-                        child: InkWell(
-                          customBorder: const CircleBorder(),
-                          onTap: onSearchTap ?? () => onSelected(0),
-                          child: SizedBox(
-                            width: 48,
-                            height: 48,
-                            child: Icon(
-                              Icons.search_rounded,
-                              color: colors.onPrimary,
-                              size: 24,
+                  builder: (context, position, destinations) {
+                    final center = (position + .5) * slotWidth;
+                    return Stack(fit: StackFit.expand, children: [
+                      CustomPaint(painter: _NavigationSurface(
+                        centerX: center,
+                        top: _surfaceTop,
+                        diameter: _medallionSize + 10,
+                        start: colors.surfaceContainerLow,
+                        end: Color.lerp(colors.surfaceContainerLow, colors.primaryContainer, .32)!,
+                        border: colors.outlineVariant,
+                        shadow: shadow.withValues(alpha: dark ? .55 : .23),
+                      )),
+                      destinations!,
+                      Positioned(
+                        left: center - _medallionSize / 2,
+                        top: 0,
+                        child: IgnorePointer(child: ExcludeSemantics(child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [colors.primary, Color.lerp(colors.primary, colors.onSurface, .14)!],
+                            ),
+                            border: Border.all(color: colors.outlineVariant),
+                            boxShadow: [BoxShadow(color: colors.primary.withValues(alpha: .32),
+                              blurRadius: 10, offset: const Offset(0, 3))],
+                          ),
+                          child: SizedBox.square(
+                            dimension: _medallionSize,
+                            child: AnimatedSwitcher(
+                              duration: duration == Duration.zero ? Duration.zero : const Duration(milliseconds: 160),
+                              transitionBuilder: (child, animation) => FadeTransition(opacity: animation,
+                                child: ScaleTransition(scale: Tween<double>(begin: .78, end: 1).animate(animation),
+                                  child: child)),
+                              child: Icon(items[selectedIndex].selectedIcon, key: ValueKey(selectedIndex),
+                                color: colors.onPrimary, size: 22),
                             ),
                           ),
-                        ),
+                        ))),
                       ),
-                    ),
-                  ),
-                  for (var index = leftCount; index < items.length; index++)
-                    Expanded(child: _destination(context, index)),
-                ],
-              ),
+                    ]);
+                  },
+                );
+              }),
             ),
           ),
         ),
@@ -90,54 +109,113 @@ class LibraryNavigation extends StatelessWidget {
     );
   }
 
-  Widget _destination(BuildContext context, int index) {
+  Widget _destination(
+    BuildContext context,
+    int index, {
+    required double labelHeight,
+    required Duration duration,
+  }) {
     final item = items[index];
-    final selected = index == selectedIndex;
-    final colors = Theme.of(context).colorScheme;
-    final iconColor = selected
-        ? colors.onPrimaryContainer
-        : colors.onSurfaceVariant;
-    final labelColor = selected ? colors.primary : colors.onSurfaceVariant;
+    final selected = selectedIndex == index;
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final activate = () => onSelected(index);
 
     return Semantics(
-      selected: selected,
-      button: true,
+      container: true,
       label: item.label,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: () => onSelected(index),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeOutCubic,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-              decoration: BoxDecoration(
-                color: selected ? colors.primaryContainer : Colors.transparent,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                selected ? item.selectedIcon : item.icon,
-                color: iconColor,
-                size: 21,
-              ),
+      button: true,
+      selected: selected,
+      onTap: activate,
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: activate,
+          excludeFromSemantics: true,
+          borderRadius: BorderRadius.circular(22),
+          focusColor: colors.primary.withValues(alpha: .16),
+          hoverColor: colors.primary.withValues(alpha: .07),
+          child: ExcludeSemantics(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Positioned(
+                  top: 25,
+                  left: 0,
+                  right: 0,
+                  child: AnimatedOpacity(
+                    opacity: selected ? 0 : 1,
+                    duration: duration,
+                    child: Icon(item.icon, size: 21, color: colors.onSurfaceVariant),
+                  ),
+                ),
+                Positioned(
+                  top: 55,
+                  left: 2,
+                  right: 2,
+                  height: labelHeight,
+                  child: Text(
+                    item.label,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      fontSize: 11,
+                      height: 1.24,
+                      color: selected ? colors.primary : colors.onSurfaceVariant,
+                      fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 2),
-            Text(
-              item.label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 11,
-                height: 1.15,
-                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                color: labelColor,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
+}
+
+class _NavigationSurface extends CustomPainter {
+  const _NavigationSurface({
+    required this.centerX,
+    required this.top,
+    required this.diameter,
+    required this.start,
+    required this.end,
+    required this.border,
+    required this.shadow,
+  });
+
+  final double centerX;
+  final double top;
+  final double diameter;
+  final Color start;
+  final Color end;
+  final Color border;
+  final Color shadow;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final host = Rect.fromLTRB(.5, top, size.width - .5, size.height - .5);
+    final guest = Rect.fromCircle(center: Offset(centerX, LibraryNavigation._medallionSize / 2),
+      radius: diameter / 2);
+    final notch = const CircularNotchedRectangle().getOuterPath(host, guest);
+    final rounded = Path()..addRRect(RRect.fromRectAndRadius(host, const Radius.circular(25)));
+    final surface = Path.combine(PathOperation.intersect, rounded, notch);
+    canvas.drawShadow(surface, shadow, 10, false);
+    canvas.drawPath(surface, Paint()..shader = LinearGradient(
+      begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [start, end],
+    ).createShader(host));
+    canvas.drawPath(surface, Paint()
+      ..color = border
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1);
+  }
+
+  @override
+  bool shouldRepaint(_NavigationSurface old) =>
+      old.centerX != centerX ||
+      old.top != top || old.diameter != diameter || old.start != start || old.end != end ||
+      old.border != border || old.shadow != shadow;
 }
